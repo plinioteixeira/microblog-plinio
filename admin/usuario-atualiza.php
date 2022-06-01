@@ -3,6 +3,27 @@ require "../inc/funcoes-usuarios.php";
 require "../inc/cabecalho-admin.php";
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $usuario = lerUmUsuario($conexao, $id);
+
+if(isset($_POST['atualizar'])){
+  $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_SPECIAL_CHARS);
+  $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
+  $tipo = filter_input(INPUT_POST, 'tipo', FILTER_SANITIZE_SPECIAL_CHARS);
+
+  /* lógica para senha
+  se o campo da senha do formulário estiver vazio, então significa que o usuário NÃO MUDOU A SENHA. */
+  if (empty($_POST['senha'])) {
+    $senha = $usuario['senha'];
+  } else {
+  /* Caso contrário, se o usuário digitou alguma alguma coisa no campo senha, precisaremos verificar a senha digitada.  */
+  $senha = verificaSenha($_POST['senha'], $usuario['senha']);
+  }
+  /* echo $usuario['senha'];
+  echo "<br>";
+  echo "formulário".$senha; */
+  atualizarUsuario($conexao, $id, $nome, $email, $senha, $tipo);
+  header("location:usuarios.php");
+}
+
 ?>
 <div class="row">
   <article class="col-12 bg-white rounded shadow my-1 py-4">
@@ -34,7 +55,7 @@ $usuario = lerUmUsuario($conexao, $id);
             value="editor">Editor</option>     
           <option 
           <?php if($usuario['tipo'] == 'admin') echo "selected" ?>
-          	value="admin">Administrador</option>
+                               	value="admin">Administrador</option>
         </select>
       </div>
       
