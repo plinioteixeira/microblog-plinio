@@ -2,6 +2,7 @@
 require "../inc/cabecalho-admin.php"; 
 require "../inc/funcoes-posts.php";
 
+
 /*  Recuperando os dados do usuário que está logado na sessão */
 $idUsuarioLogado = $_SESSION['id'];
 $tipoUsuarioLogado = $_SESSION['tipo'];
@@ -34,7 +35,7 @@ $quantidade = count($posts)
 
           <tr>
             <td> <?=$post['titulo']?> </td>
-            <td> <?=$post['data']?> </td>
+            <td> <?=formataData($post['data'])?> </td>
 
             <?php if ($_SESSION['tipo'] == 'admin') {
              ?>
